@@ -1,0 +1,122 @@
+<html><!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <title>Account Management</title>
+
+    <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/css/font-awesome.min.css" rel="stylesheet">
+
+    <!-- jqgrid-->
+    <link href="static/css/plugins/jqgrid/ui.jqgrid.css" rel="stylesheet">
+
+    <link href="static/css/animate.min.css" rel="stylesheet">
+    <link href="static/css/style.min.css" rel="stylesheet">
+
+    <style>
+        /* Additional style to fix warning dialog position */
+
+        #alertmod_table_list_2 {
+            top: 900px !important;
+        }
+    </style>
+
+</head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox ">
+                <div class="ibox-content">
+                    <h4 class="m-t">Account List</h4>
+                    <div class="jqGrid_wrapper">
+                        <table id="table_list_2"></table>
+                        <div id="pager_list_2"></div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-w-m btn-success" onclick="window.location.href='adduser'">ADD USER</button>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script src="static/js/jquery-2.1.1.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+
+
+<!-- Peity -->
+<script src="static/js/plugins/peity/jquery.peity.min.js"></script>
+
+<!-- jqGrid -->
+<script src="static/js/plugins/jqgrid/i18n/grid.locale-cn.js-0820"></script>
+<script src="static/js/plugins/jqgrid/jquery.jqGrid.min.js-0820"></script>
+
+<!-- 自定义js -->
+<script src="static/js/content.min.js"></script>
+
+<!-- Page-Level Scripts -->
+<script>
+    $(document).ready(function () {
+        $.jgrid.defaults.styleUI = "Bootstrap";
+        $("#table_list_2").jqGrid({
+            url:'/users',
+            editurl:'users',
+            datatype : "json",
+            mtype:'GET',
+            height: 450,
+            autowidth: true,
+            shrinkToFit: true,
+            rowNum: 20,
+            rowList: [10, 20, 30],
+            colNames: ["ID", "注册日期", "用户名", "最后登录"],
+            colModel: [{
+                name: "id",
+                index: "id",
+                editable: false,
+                width: 60,
+                sorttype: "int",
+                search: true,
+            }, {
+                name: "creationTime",
+                index: "creationTime",
+                editable: true,
+                width: 90,
+                sorttype: "date",
+                formatter: "date"
+            }, {name: "primaryEmail", index: "primaryEmail",key:true, editable: true, width: 100},
+                {name: "lastLoginTime", index: "lastLoginTime", editable: true, width: 100, sortable: false}],
+            pager: "#pager_list_2",
+            viewrecords: true,
+            caption: "Users",
+            add: false,
+            edit: false,
+            addtext: "Add",
+            edittext: "Edit",
+            hidegrid: false
+        });
+        $("#table_list_2").setSelection(4, true);
+        $("#table_list_2").jqGrid("navGrid", "#pager_list_2", {
+            url:'/modify',
+            add:false,
+            edit:false,
+            del: true,
+            search: false
+        }, {height: 200, reloadAfterSubmit: true});
+        $(window).bind("resize", function () {
+            var b = $(".jqGrid_wrapper").width();
+            $("#table_list_2").setGridWidth(b)
+        })
+    });
+</script>
+
+
+</body>
+
+</html>
